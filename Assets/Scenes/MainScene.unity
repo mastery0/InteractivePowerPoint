@@ -148,10 +148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94fe999f17a82be4995ca780614b170a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  clips: []
   mainMixer: {fileID: 24100000, guid: 6b325f80f956787439ebe95d0e114dc7, type: 2}
   masterGroup: {fileID: 24300002, guid: 6b325f80f956787439ebe95d0e114dc7, type: 2}
   source: {fileID: 4093548785145024502, guid: 27101c8a3cc971644986abd0a37a2e6d, type: 3}
   bgmPlayer: {fileID: 0}
+  playing: 0
 --- !u!4 &1322253229
 Transform:
   m_ObjectHideFlags: 0

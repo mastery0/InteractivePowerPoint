@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -18,10 +19,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioMixerGroup masterGroup;
     [Space]
     [SerializeField] AudioSource source;
-    
+
     [Header("Runtime")]
     public float Volume { get; private set; }
     public AudioSource bgmPlayer;
+    public bool playing;
 
     void Awake()
     {
@@ -36,7 +38,6 @@ public class AudioManager : MonoBehaviour
     }
     void OnApplicationQuit() => SetSavedVolume(Volume);
 
-    // Publics
     public static void Play(AudioClip clip, float volume)
     {
         AudioSource source = Instantiate(Instance.source);
@@ -45,9 +46,43 @@ public class AudioManager : MonoBehaviour
         source.Play();
         Destroy(source.gameObject, clip.length);
     }
-    public static void SetBgmClip(AudioClip clip) => Instance.bgmPlayer.clip = clip;
-    public static void SetBgmVolume(float volume) => Instance.bgmPlayer.volume = volume;
+    public static void SetVolume(float volume)
+    {
+        Instance.mainMixer.SetFloat(MasterVolumeKey, volume);
+        Instance.Volume = volume;
+    }
 
+    // BGM
+    public static void ToggleBgm(float transitionTime) => Instance.StartCoroutine(ToggleBgmCR(transitionTime));
+    static IEnumerator ToggleBgmCR(float transitionTime)
+    {
+        if (Instance.playing)
+        {
+            FadeVolume(Instance.bgmPlayer, 0, transitionTime);
+            yield return new WaitForSeconds(transitionTime);
+            Instance.bgmPlayer.Pause();
+            Instance.playing = false;
+        }
+        else
+        {
+            FadeVolume(Instance.bgmPlayer, Instance.Volume, transitionTime);
+            yield return new WaitForSeconds(transitionTime);
+            Instance.bgmPlayer.UnPause();
+            Instance.playing = true;
+        }
+    }
+
+    public static void SwitchBgm(AudioClip clip, float transitionTime) => Instance.StartCoroutine(SwitchBgmCR(clip, transitionTime));
+    static IEnumerator SwitchBgmCR(AudioClip clip, float transitionTime)
+    {
+        FadeVolume(Instance.bgmPlayer, 0, transitionTime / 2);
+        yield return new WaitForSeconds(transitionTime / 2);
+        Instance.bgmPlayer.clip = clip;
+        FadeVolume(Instance.bgmPlayer, Instance.Volume, transitionTime / 2);
+        yield return new WaitForSeconds(transitionTime / 2);
+    }
+
+    // Helpers
     public static float VolumeToDb(float volume)
     {
         volume = Mathf.Clamp01(volume);
@@ -62,16 +97,18 @@ public class AudioManager : MonoBehaviour
             transitionTime);
     }
 
-    // Privates
-    float GetSavedVolume() => PlayerPrefs.GetFloat(MasterVolumeKey);
+    // Save / Load
     void SetSavedVolume(float volume) => PlayerPrefs.SetFloat(MasterVolumeKey, volume);
+    float GetSavedVolume() => PlayerPrefs.GetFloat(MasterVolumeKey);
 
     void InitBgmPlayer()
     {
         bgmPlayer = Instantiate(source, transform);
         bgmPlayer.outputAudioMixerGroup = masterGroup;
         bgmPlayer.loop = true;
-        bgmPlayer.volume = 0f;
+        bgmPlayer.volume = Volume;
         bgmPlayer.Play();
+
+        playing = true;
     }
 }
