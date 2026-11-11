@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+
 public class Scenemanager : MonoBehaviour
 {
     public List<GameObject> slides;
