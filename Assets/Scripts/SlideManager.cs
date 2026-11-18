@@ -10,7 +10,7 @@ using UnityEngine.PlayerLoop;
 public class SlideManager : MonoBehaviour
 {
     public Camera mainCamera;
-    public Transform anchor;
+    public RectTransform anchor;
 
     public List<Transform> slides = new();
     public Vector2 offsetFromCameraCenter;
@@ -51,14 +51,15 @@ public class SlideManager : MonoBehaviour
 
         if (currentIndex >= slides.Count)
             currentIndex = 0;
-        if (currentIndex <= 0)
+        if (currentIndex < 0)
             currentIndex = slides.Count - 1;
 
+        Debug.Log(currentIndex);
         transitionQueue.Enqueue(slides[currentIndex]);
     }
     async Task Transition(Transform point, float transitionTime)
     {
-        anchor.DOMove(-point.position + (Vector3)offsetFromCameraCenter, transitionTime);
+        anchor.DOAnchorPos(-point.GetComponent<RectTransform>().anchoredPosition + offsetFromCameraCenter, transitionTime);
         await anchor.DOScale(new Vector3(0.8f, 0.8f, 1), transitionTime / 2).AsyncWaitForCompletion();
         await anchor.DOScale(new Vector3(1, 1, 1), transitionTime / 2).AsyncWaitForCompletion();
     }
