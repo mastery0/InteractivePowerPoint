@@ -3,7 +3,7 @@
 Claude Monet (1899)
 Giulio Di Bartolo e Gioele Garozzo V BS 2026/2027
 
-- Claude Monet e l'Impressionismo
+- Slide 2: Claude Monet e l'Impressionismo
  Francia, seconda metà dell'Ottocento.
  Monet è uno dei fondatori dell'Impressionismo, movimento nato dal dipinto *Impressione, levar del sole* (1872).
  L'impressionismo ricerca la rappresentazione della luce e delle impressioni visive attraverso colori e pennellate rapide.
