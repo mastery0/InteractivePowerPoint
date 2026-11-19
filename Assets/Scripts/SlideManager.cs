@@ -23,13 +23,6 @@ public class SlideManager : MonoBehaviour
         mainCamera = Camera.main;
         currentIndex = 0;
 
-        RequestTransition(1);
-        RequestTransition(1);
-        RequestTransition(1);
-        RequestTransition(1);
-        RequestTransition(1);
-        RequestTransition(1);
-
         CheckForTransition().Forget();
     }
 
@@ -59,6 +52,7 @@ public class SlideManager : MonoBehaviour
     }
     async Task Transition(Transform point, float transitionTime)
     {
+        AudioManager.SwitchBgm(AudioManager.Instance.clips[currentIndex], 1f);
         anchor.DOAnchorPos(-point.GetComponent<RectTransform>().anchoredPosition + offsetFromCameraCenter, transitionTime);
         await anchor.DOScale(new Vector3(0.8f, 0.8f, 1), transitionTime / 2).AsyncWaitForCompletion();
         await anchor.DOScale(new Vector3(1, 1, 1), transitionTime / 2).AsyncWaitForCompletion();

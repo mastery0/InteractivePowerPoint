@@ -13,7 +13,7 @@ public class AudioManager : MonoBehaviour
     public const float MinVolume = 0.001f;
 
     [Header("Setup")]
-    [SerializeField] public Dictionary<string, AudioClip> clips = new();
+    [SerializeField] public Dictionary<int, AudioClip> clips = new();
     [Space]
     [SerializeField] AudioMixer mainMixer;
     [SerializeField] AudioMixerGroup masterGroup;
@@ -75,6 +75,9 @@ public class AudioManager : MonoBehaviour
     public static void SwitchBgm(AudioClip clip, float transitionTime) => Instance.StartCoroutine(SwitchBgmCR(clip, transitionTime));
     static IEnumerator SwitchBgmCR(AudioClip clip, float transitionTime)
     {
+        if (clip == Instance.bgmPlayer.clip)
+            yield break;
+
         FadeVolume(Instance.bgmPlayer, 0, transitionTime / 2);
         yield return new WaitForSeconds(transitionTime / 2);
         Instance.bgmPlayer.clip = clip;
