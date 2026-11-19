@@ -1,0 +1,57 @@
+{
+    "version": 1,
+    "name": "Actions",
+    "maps": [
+        {
+            "name": "Switch",
+            "id": "379a8096-8d34-4155-9001-ace77ff2f1f8",
+            "actions": [
+                {
+                    "name": "Forward",
+                    "type": "Button",
+                    "id": "d5b214de-0d63-4158-bcf1-436ef31411cd",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Back",
+                    "type": "Button",
+                    "id": "65827b28-3b8e-45a7-9c86-69fca52644b7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "088cfe5e-8a26-4ae9-ab4a-cf697cf67650",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Forward",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aded7565-9d09-42e0-9d6a-9b2bc9148f3a",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Back",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

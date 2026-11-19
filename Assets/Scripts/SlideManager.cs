@@ -9,6 +9,8 @@ using UnityEngine.PlayerLoop;
 
 public class SlideManager : MonoBehaviour
 {
+    
+
     public Camera mainCamera;
     public RectTransform anchor;
 
