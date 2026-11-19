@@ -13,7 +13,7 @@ public class AudioManager : MonoBehaviour
     public const float MinVolume = 0.001f;
 
     [Header("Setup")]
-    [SerializeField] public Dictionary<int, AudioClip> clips = new();
+    [SerializeField] public List<AudioClip> clips = new();
     [Space]
     [SerializeField] AudioMixer mainMixer;
     [SerializeField] AudioMixerGroup masterGroup;
@@ -21,7 +21,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource source;
 
     [Header("Runtime")]
-    public float Volume { get; private set; }
+    public float Volume { get; private set; } = MaxVolume;
     public AudioSource bgmPlayer;
     public bool playing;
 
@@ -31,16 +31,21 @@ public class AudioManager : MonoBehaviour
     }
     void Start()
     {
-        Volume = GetSavedVolume();
+        Volume = MaxVolume;
 
         InitBgmPlayer();
-        FadeVolume(bgmPlayer, Volume, 0.02f);
+        if (bgmPlayer != null)
+            FadeVolume(bgmPlayer, Volume, 0.02f);
     }
     void OnApplicationQuit() => SetSavedVolume(Volume);
 
     public static void Play(AudioClip clip, float volume)
     {
+        if (clip == null || Instance == null || Instance.source == null)
+            return;
+
         AudioSource source = Instantiate(Instance.source);
+        source.clip = clip;
         source.outputAudioMixerGroup = Instance.masterGroup;
         source.volume = volume;
         source.Play();
@@ -75,12 +80,17 @@ public class AudioManager : MonoBehaviour
     public static void SwitchBgm(AudioClip clip, float transitionTime) => Instance.StartCoroutine(SwitchBgmCR(clip, transitionTime));
     static IEnumerator SwitchBgmCR(AudioClip clip, float transitionTime)
     {
-        if (clip == Instance.bgmPlayer.clip)
+        if (clip == null || Instance.bgmPlayer == null)
+            yield break;
+
+        if (clip == Instance.bgmPlayer.clip && Instance.bgmPlayer.isPlaying)
             yield break;
 
         FadeVolume(Instance.bgmPlayer, 0, transitionTime / 2);
         yield return new WaitForSeconds(transitionTime / 2);
         Instance.bgmPlayer.clip = clip;
+        Instance.bgmPlayer.Play();
+        Instance.playing = true;
         FadeVolume(Instance.bgmPlayer, Instance.Volume, transitionTime / 2);
         yield return new WaitForSeconds(transitionTime / 2);
     }
@@ -106,12 +116,36 @@ public class AudioManager : MonoBehaviour
 
     void InitBgmPlayer()
     {
+        if (source == null)
+        {
+            Debug.LogError("AudioManager has no AudioSource prefab assigned.");
+            return;
+        }
+
         bgmPlayer = Instantiate(source, transform);
         bgmPlayer.outputAudioMixerGroup = masterGroup;
         bgmPlayer.loop = true;
         bgmPlayer.volume = Volume;
+
+        AudioClip initialClip = GetClip(0);
+        if (initialClip == null)
+        {
+            Debug.LogWarning("AudioManager has no BGM clips assigned.");
+            playing = false;
+            return;
+        }
+
+        bgmPlayer.clip = initialClip;
         bgmPlayer.Play();
 
         playing = true;
+    }
+
+    public AudioClip GetClip(int index)
+    {
+        if (clips == null || index < 0 || index >= clips.Count)
+            return null;
+
+        return clips[index];
     }
 }
