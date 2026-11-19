@@ -5544,9 +5544,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   clips:
   - {fileID: 8300000, guid: 8d74e487d2b60bc4f9a76608f452eff9, type: 3}
+  - {fileID: 8300000, guid: 8d74e487d2b60bc4f9a76608f452eff9, type: 3}
+  - {fileID: 8300000, guid: 8d74e487d2b60bc4f9a76608f452eff9, type: 3}
+  - {fileID: 8300000, guid: 575518c8924a26547b1e47bd5bb2ac51, type: 3}
+  - {fileID: 8300000, guid: 575518c8924a26547b1e47bd5bb2ac51, type: 3}
+  - {fileID: 8300000, guid: 575518c8924a26547b1e47bd5bb2ac51, type: 3}
   - {fileID: 8300000, guid: 4ca2a9e70755d2842adfe8b8222c0e1a, type: 3}
   - {fileID: 8300000, guid: 4ca2a9e70755d2842adfe8b8222c0e1a, type: 3}
   - {fileID: 8300000, guid: 4ca2a9e70755d2842adfe8b8222c0e1a, type: 3}
+  - {fileID: 8300000, guid: 0c85c57756f67e44c93d636ae4e175e4, type: 3}
   mainMixer: {fileID: 24100000, guid: 6b325f80f956787439ebe95d0e114dc7, type: 2}
   masterGroup: {fileID: 24300002, guid: 6b325f80f956787439ebe95d0e114dc7, type: 2}
   source: {fileID: 4093548785145024502, guid: 27101c8a3cc971644986abd0a37a2e6d, type: 3}
