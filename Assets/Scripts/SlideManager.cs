@@ -9,7 +9,7 @@ using UnityEngine.PlayerLoop;
 
 public class SlideManager : MonoBehaviour
 {
-    
+    private Actions inputs;
 
     public Camera mainCamera;
     public RectTransform anchor;
@@ -26,6 +26,18 @@ public class SlideManager : MonoBehaviour
         currentIndex = 0;
 
         CheckForTransition().Forget();
+
+        inputs = new Actions();
+        inputs.Enable();
+    }
+
+    private void Update()
+    {
+        if (inputs.Switch.Forward.WasPressedThisFrame())
+            RequestTransition(1);
+
+        if (inputs.Switch.Back.WasPressedThisFrame())
+            RequestTransition(-1);
     }
 
     async UniTask CheckForTransition()
@@ -49,12 +61,14 @@ public class SlideManager : MonoBehaviour
         if (currentIndex < 0)
             currentIndex = slides.Count - 1;
 
-        Debug.Log(currentIndex);
         transitionQueue.Enqueue(slides[currentIndex]);
     }
     async Task Transition(Transform point, float transitionTime)
     {
-        AudioManager.SwitchBgm(AudioManager.Instance.clips[currentIndex], 1f);
+        AudioClip clip = AudioManager.Instance?.GetClip(currentIndex);
+        if (clip != null)
+            AudioManager.SwitchBgm(clip, 1f);
+
         anchor.DOAnchorPos(-point.GetComponent<RectTransform>().anchoredPosition + offsetFromCameraCenter, transitionTime);
         await anchor.DOScale(new Vector3(0.8f, 0.8f, 1), transitionTime / 2).AsyncWaitForCompletion();
         await anchor.DOScale(new Vector3(1, 1, 1), transitionTime / 2).AsyncWaitForCompletion();
